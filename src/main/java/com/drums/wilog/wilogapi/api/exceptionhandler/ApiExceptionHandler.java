@@ -1,5 +1,8 @@
 package com.drums.wilog.wilogapi.api.exceptionhandler;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,8 @@ import java.util.List;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @Autowired
+    private MessageSource messageSource;
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -25,7 +30,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         for (ObjectError error : ex.getBindingResult().getAllErrors()){
 
             String name = ((FieldError)error).getField();
-            String message = error.getDefaultMessage();
+            //Locale pega a linguagem local para utilizar nas mensagens, no caso português
+            String message = messageSource.getMessage(error, LocaleContextHolder.getLocale());
             fields.add(new Problem.Field(name,message));
         }
 

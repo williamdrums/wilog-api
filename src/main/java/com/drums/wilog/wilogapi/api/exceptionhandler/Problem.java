@@ -3,7 +3,6 @@ package com.drums.wilog.wilogapi.api.exceptionhandler;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 
