@@ -1,5 +1,6 @@
 package com.drums.wilog.wilogapi.domian.model;
 
+import com.drums.wilog.wilogapi.domian.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -17,6 +19,7 @@ import javax.validation.constraints.Size;
 @Table(name = "cliente")
 public class Cliente {
 
+    @NotNull( groups = ValidationGroups.ClientId.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
