@@ -1,6 +1,6 @@
 package com.drums.wilog.wilogapi.api.exceptionhandler;
 
-import com.drums.wilog.wilogapi.domian.exception.BusinessRuleException;
+import com.drums.wilog.wilogapi.domian.exception.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,36 +24,37 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired
     private MessageSource messageSource;
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        List<Problem.Field> fields = new ArrayList<>();
+        List<Problema.Campo> fields = new ArrayList<>();
 
-        for (ObjectError error : ex.getBindingResult().getAllErrors()){
+        for (ObjectError error : ex.getBindingResult().getAllErrors()) {
 
-            String name = ((FieldError)error).getField();
+            String name = ((FieldError) error).getField();
             //Locale pega a linguagem local para utilizar nas mensagens, no caso português
             String message = messageSource.getMessage(error, LocaleContextHolder.getLocale());
-            fields.add(new Problem.Field(name,message));
+            fields.add(new Problema.Campo(name, message));
         }
 
-        Problem problem = new Problem();
-        problem.setStatus(status.value());
-        problem.setDateTime(LocalDateTime.now());
-        problem.setTitle("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.");
-        problem.setFields(fields);
-        return handleExceptionInternal(ex, problem,headers,status,request);
+        Problema problema = new Problema();
+        problema.setStatus(status.value());
+        problema.setDateHora(LocalDateTime.now());
+        problema.setTitulo("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.");
+        problema.setCampos(fields);
+        return handleExceptionInternal(ex, problema, headers, status, request);
     }
 
-    @ExceptionHandler(BusinessRuleException.class)
-    public ResponseEntity<Object> handleBusiness(BusinessRuleException ex,WebRequest request){
+    @ExceptionHandler(RegraNegocioException.class)
+    public ResponseEntity<Object> handleBusiness(RegraNegocioException ex, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
-        Problem problem = new Problem();
-        problem.setStatus(status.value());
-        problem.setDateTime(LocalDateTime.now());
-        problem.setTitle(ex.getMessage());
+        Problema problema = new Problema();
+        problema.setStatus(status.value());
+        problema.setDateHora(LocalDateTime.now());
+        problema.setTitulo(ex.getMessage());
 
-    return handleExceptionInternal(ex,problem,new HttpHeaders(),status,request);
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
     }
 }

@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Entity
 @Table(name = "cliente")
-public class Client {
+public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Client {
 
     @NotBlank
     @Size(max = 60)
-    private String name;
+    private String nome;
 
     @NotBlank
     @Size(max = 255)
@@ -32,6 +32,5 @@ public class Client {
 
     @NotBlank
     @Size(max = 20)
-    @Column(name = "telefone")
-    private String phone;
+    private String telefone;
 }

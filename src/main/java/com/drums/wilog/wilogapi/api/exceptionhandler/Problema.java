@@ -9,16 +9,16 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class Problem {
+public class Problema {
     private Integer status;
-    private LocalDateTime dateTime;
-    private String title;
-    private List<Field> fields;
+    private LocalDateTime dateHora;
+    private String titulo;
+    private List<Campo> campos;
 
     @AllArgsConstructor
     @Data
-    public static class Field{
-        private String name;
+    public static class Campo {
+        private String nome;
         private String message;
     }
 }
