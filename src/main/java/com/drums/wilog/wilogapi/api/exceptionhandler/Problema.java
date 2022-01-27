@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class Problema {
     private Integer status;
-    private LocalDateTime dateHora;
+    private OffsetDateTime dateHora;
     private String titulo;
     private List<Campo> campos;
 

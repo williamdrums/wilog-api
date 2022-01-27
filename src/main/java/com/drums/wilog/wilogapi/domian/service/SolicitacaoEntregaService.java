@@ -7,8 +7,7 @@ import com.drums.wilog.wilogapi.domian.repository.EntregaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Service
 public class SolicitacaoEntregaService {
@@ -24,7 +23,7 @@ public class SolicitacaoEntregaService {
         Cliente cliente = clienteService.find(entrega.getCliente().getId());
         entrega.setCliente(cliente);
         entrega.setStatusEntrega(StatusEntrega.PENDENTE);
-        entrega.setDataPedido(LocalDateTime.now());
+        entrega.setDataPedido(OffsetDateTime.now());
         return entregaRepository.save(entrega);
     }
 }
