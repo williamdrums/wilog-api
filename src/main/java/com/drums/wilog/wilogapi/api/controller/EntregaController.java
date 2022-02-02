@@ -3,6 +3,7 @@ package com.drums.wilog.wilogapi.api.controller;
 import com.drums.wilog.wilogapi.api.dto.EntregaDTO;
 import com.drums.wilog.wilogapi.api.mapper.EntregaMapper;
 import com.drums.wilog.wilogapi.domian.model.Entrega;
+import com.drums.wilog.wilogapi.domian.model.input.EntregaInput;
 import com.drums.wilog.wilogapi.domian.repository.EntregaRepository;
 import com.drums.wilog.wilogapi.domian.service.SolicitacaoEntregaService;
 import org.modelmapper.ModelMapper;
@@ -30,8 +31,10 @@ public class EntregaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EntregaDTO creteDelivery(@Valid @RequestBody Entrega entrega) {
-        Entrega entregaSolicitada = solicitacaoEntregaService.createDelivery(entrega);
+    public EntregaDTO creteDelivery(@Valid @RequestBody EntregaInput entregaInput) {
+        Entrega novaEntrega = entregaMapper.toEntity(entregaInput);
+        Entrega entregaSolicitada = solicitacaoEntregaService.createDelivery(novaEntrega);
+
         return entregaMapper.toModel(entregaSolicitada);
     }
 
