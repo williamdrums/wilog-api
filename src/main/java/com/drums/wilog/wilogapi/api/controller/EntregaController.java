@@ -1,6 +1,7 @@
 package com.drums.wilog.wilogapi.api.controller;
 
 import com.drums.wilog.wilogapi.api.dto.EntregaDTO;
+import com.drums.wilog.wilogapi.api.mapper.EntregaMapper;
 import com.drums.wilog.wilogapi.domian.model.Entrega;
 import com.drums.wilog.wilogapi.domian.repository.EntregaRepository;
 import com.drums.wilog.wilogapi.domian.service.SolicitacaoEntregaService;
@@ -19,7 +20,7 @@ public class EntregaController {
 
 
     @Autowired
-    private ModelMapper modelMapper;
+    private EntregaMapper entregaMapper;
 
     @Autowired
     private EntregaRepository entregaRepository;
@@ -29,22 +30,19 @@ public class EntregaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Entrega creteDelivery(@Valid @RequestBody Entrega entrega) {
-        return solicitacaoEntregaService.createDelivery(entrega);
+    public EntregaDTO creteDelivery(@Valid @RequestBody Entrega entrega) {
+        Entrega entregaSolicitada = solicitacaoEntregaService.createDelivery(entrega);
+        return entregaMapper.toModel(entregaSolicitada);
     }
 
     @GetMapping
-    public List<Entrega> findAll() {
-        return entregaRepository.findAll();
+    public List<EntregaDTO> findAll() {
+        return entregaMapper.toCollectionModel(entregaRepository.findAll());
     }
 
     @GetMapping("/{entregaId}")
     public ResponseEntity<EntregaDTO> find(@PathVariable Long entregaId) {
         return entregaRepository.findById(entregaId)
-                .map(entrega -> {
-                    EntregaDTO entregaDTO = modelMapper.map(entrega, EntregaDTO.class);
-                    return ResponseEntity.ok(entregaDTO);
-                })
-                .orElse(ResponseEntity.notFound().build());
+                .map(entrega -> ResponseEntity.ok(entregaMapper.toModel(entrega))).orElse(ResponseEntity.notFound().build());
     }
 }
