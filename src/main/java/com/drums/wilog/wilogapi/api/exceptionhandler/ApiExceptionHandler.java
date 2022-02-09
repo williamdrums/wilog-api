@@ -1,5 +1,6 @@
 package com.drums.wilog.wilogapi.api.exceptionhandler;
 
+import com.drums.wilog.wilogapi.domian.exception.EntidadeNaoEncontradaException;
 import com.drums.wilog.wilogapi.domian.exception.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -45,6 +46,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         problema.setTitulo("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.");
         problema.setCampos(fields);
         return handleExceptionInternal(ex, problema, headers, status, request);
+    }
+
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<Object> handleEntidadeNaoEncontrada(RegraNegocioException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        Problema problema = new Problema();
+        problema.setStatus(status.value());
+        problema.setDateHora(OffsetDateTime.now());
+        problema.setTitulo(ex.getMessage());
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(RegraNegocioException.class)
