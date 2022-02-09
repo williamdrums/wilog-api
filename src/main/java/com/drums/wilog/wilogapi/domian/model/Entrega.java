@@ -1,6 +1,7 @@
 package com.drums.wilog.wilogapi.domian.model;
 
 import com.drums.wilog.wilogapi.domian.ValidationGroups;
+import com.drums.wilog.wilogapi.domian.exception.RegraNegocioException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -53,5 +54,21 @@ public class Entrega {
 
         this.getOcorrencias().add(ocorrencia);
         return ocorrencia;
+    }
+
+    public void finalizar() {
+        if (naoPodeSerFinalizada()) {
+            throw new RegraNegocioException("Entrega não pode ser finalizada");
+        }
+        setStatusEntrega(StatusEntrega.FINALIZADA);
+        setDataFinalizacao(OffsetDateTime.now());
+    }
+
+    public boolean podeSerFinalizada() {
+        return StatusEntrega.PENDENTE.equals(getStatusEntrega());
+    }
+
+    public boolean naoPodeSerFinalizada() {
+        return !podeSerFinalizada();
     }
 }

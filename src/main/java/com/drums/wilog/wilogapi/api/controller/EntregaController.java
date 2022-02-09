@@ -5,6 +5,7 @@ import com.drums.wilog.wilogapi.api.mapper.EntregaMapper;
 import com.drums.wilog.wilogapi.domian.model.Entrega;
 import com.drums.wilog.wilogapi.domian.model.input.EntregaInput;
 import com.drums.wilog.wilogapi.domian.repository.EntregaRepository;
+import com.drums.wilog.wilogapi.domian.service.FinalizacaoEntregaService;
 import com.drums.wilog.wilogapi.domian.service.SolicitacaoEntregaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,10 @@ public class EntregaController {
     @Autowired
     private SolicitacaoEntregaService solicitacaoEntregaService;
 
+    @Autowired
+    private FinalizacaoEntregaService finalizacaoEntregaService;
+
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EntregaDTO creteDelivery(@Valid @RequestBody EntregaInput entregaInput) {
@@ -36,6 +41,12 @@ public class EntregaController {
         Entrega entregaSolicitada = solicitacaoEntregaService.createDelivery(novaEntrega);
 
         return entregaMapper.toModel(entregaSolicitada);
+    }
+
+    @PutMapping("/{entregaId}/finalizacao")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finalization(@PathVariable Long entregaId) {
+        finalizacaoEntregaService.finalizationDelivery(entregaId);
     }
 
     @GetMapping
